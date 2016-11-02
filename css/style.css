@@ -5,6 +5,8 @@ body {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+    font-family: 'Open Sans', sans-serif;
+
 }
 
 
@@ -20,7 +22,7 @@ body {
 
 .jumbotron{
     background-color:transparent !important; 
-    
+    font-family: 'Open Sans', sans-serif;
 }
 
 
@@ -76,4 +78,13 @@ body {
     background-color: #305777;
     border-color: rgba(0, 0, 0, 0.2);
     color: #fff;
+}
+
+
+
+.entry-content{
+    width: 50%;
+    margin: 0 auto;
+    text-align: justify;
+
 }
