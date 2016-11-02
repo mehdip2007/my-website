@@ -1,0 +1,79 @@
+body {
+    background-color: black;
+    background: url(bg-3.jpg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+
+.panel{
+
+    background-color: transparent;
+}
+
+
+.panel-default{
+    background-color: transparent;
+}
+
+.jumbotron{
+    background-color:transparent !important; 
+    
+}
+
+
+
+.jumbotron h1{
+    color: #fff;
+}
+
+
+.footer{
+    margin-top: 50px;
+    padding-top: 50px;
+}
+
+.navbar.navbar-default.navbar-fixed-bottom.navbar-transparent{
+    background-color: transparent;
+}
+
+
+/* for social colors */
+.btn-linkedin {
+    background-color: #007bb6;
+    border-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+.btn-linkedin:hover {
+    background-color: #005983;
+    border-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+
+.btn-facebook {
+    background-color: #3b5998;
+    border-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+.btn-facebook:hover {
+    background-color: #2d4373;
+    border-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+.btn-instagram {
+    background-color: #3f729b;
+    border-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+.btn-instagram:hover {
+    background-color: #305777;
+    border-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
