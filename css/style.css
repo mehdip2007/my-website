@@ -5,7 +5,6 @@ body {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    font-family: 'Open Sans', sans-serif;
 
 }
 
@@ -22,7 +21,6 @@ body {
 
 .jumbotron{
     background-color:transparent !important; 
-    font-family: 'Open Sans', sans-serif;
 }
 
 
