@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome To Mehdi website.</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css" >
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-social.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="icon" type="image/x-icon" href="../css/tux-icon.ico">
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+  </head>
+
+  <body>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav">
+                  <li><a href="../index.html">Home</a></li>
+                  <li class="active"><a href="../My-Posts.html">Posts</a></li>
+                  <li><a href="../Contact-Me.html">Contact Me</a></li>
+                  <li><a href="../About-Me.html">About Me</a></li>
+                </ul>
+            </div>
+        </nav>
+
+
+
+ <div class="container" style="text-align: center">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="page-heading">
+                        <h1 style="font-weight:700">How to Install Arch Linux</h1>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+          
+    
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" style="text-align:justify;">
+            <pre style="font-family: inherit; background-color: transparent; ">  Before we begin lets have shot review on what is "archlinux" ?
+
+Arch Linux is an independently developed, i686/x86-64 general purpose GNU/Linux distribution versatile enough to suit any role. Development focuses on simplicity, minimalism, and code elegance. Arch is installed as a minimal base system, configured by the user upon which their own ideal environment is assembled by installing only what is required or desired for their unique purposes. GUI configuration utilities are not officially provided, and most system configuration is performed from the shell by editing simple text files. Arch strives to stay bleeding edge, and typically offers the latest stable versions of most software.
+Arch Linux uses its own Pacman package manager, which couples simple binary packages with an easy-to-use package build system. This allows users to easily manage and customize packages ranging from official Arch software to the user's own personal packages to packages from 3rd party sources. The repository system also allows users to easily build and maintain their own custom build scripts, packages, and repositories, encouraging community growth and contribution.
+The minimal Arch base package set resides in the streamlined [core] repository. In addition, the official [extra], [community], and [testing] repositories provide several thousand high-quality, packages to meet your software demands. Arch also offers an [unsupported] section in the Arch Linux User Repository (AUR), which contains over 9,000 build scripts, for compiling installable packages from source using the Arch Linux makepkg application.
+Arch Linux uses a "rolling release" system which allows one-time installation and perpetual software upgrades. It is not generally necessary to reinstall or upgrade your Arch Linux system from one "version" to the next. By issuing one command, an Arch system is kept up-to-date and on the bleeding edge.
+Arch strives to keep its packages as close to the original upstream software as possible. Patches are applied only when necessary to ensure an application compiles and runs correctly with the other packages installed on an up-to-date Arch system.
+To summarize: Arch Linux is a versatile, and simple distribution designed to fit the needs of the competent Linux® user. It is both powerful and easy to manage, making it an ideal distro for servers and workstations. Take it in any direction you like. If you share this vision of what a GNU/Linux distribution should be, then you are welcomed and encouraged to use it freely, get involved, and contribute to the community. Welcome to Arch!
+
+1- make sure you have internet connection availabity by issuing the ping command
+
+2- setup partiotion by issue the command "cfdisk"
+
+    sda1 bootable / primary beginning
+    sda2 /home primary beginning
+    sda5 swap primary End
+
+<strong>Note : The highlight text above is just an example how your partition should look like(i assume you know how to partiotion linux drive)</strong>
+
+3- Make file system
+    mkfs.ext4 /dev/sda1
+    mkfs.ext4 /dev/sda2
+    mkswap /dev/sda5
+    swapon /dev/sda5
+
+4- mount arch linux ISO on Drive
+    mount /dev/sda1 /mnt
+    mkdir /mnt/home
+    mount /dev/sda2 /mnt/home
+
+5- Now its time to install the base of the arch linux ,you can change the mirror list if you want by editing the file (/etc/pacman.d/mirrorlist) this one is optional
+    pacstrap /mnt base base-devel
+
+after the dowload is finished go to step 6.
+
+6- generate the file system table
+    genfstab /mnt >> /mnt/etc/fstab
+
+just to make sure you your fstab generated check the “vi /mnt/etc/fstab”
+
+7- chroot to your mounted system
+    arch-chroot /mnt
+
+give your system a root password “passwd”
+
+8- Set the timezone/area locale
+    vi /etc/locale.gen
+
+uncomment your desire language for example “ en_US.UTF8 UTF8 & en_US ISO-8859-1”
+    issue the command “locale-gen”
+
+check your date by issue the “date” command if its not set to your date zone look for your time zone in /usr/share/zoneinfo to find where are you for me its Iran so I set my date time like the following :
+
+ln -s /usr/share/zoneinfo/Asia/Tehran /etc/localtime
+
+9- set Hostname
+    echo${Desire_hostname} > /etc/hostname
+
+10- Download & install the grub bootloader
+    pacman -S grub-bios
+    grub-install /dev/sda
+
+11- this is optional too, but if you wanna have your configuration hardware file issue the following command :
+    mkinitcpio -p linux
+
+12-now generate grub
+
+    grub-mkconfig -o /boot/grub/grub.cfg
+
+13 – exit chroot
+    exit
+    umount /mnt/home
+    umount /mnt/
+    reboot
+
+            </pre>
+          </div>
+
+
+
+
+  </body>
+</html>

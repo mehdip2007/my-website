@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome To Mehdi website.</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css" >
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-social.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="icon" type="image/x-icon" href="../css/tux-icon.ico">
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+  </head>
+
+  <body>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav">
+                  <li><a href="../index.html">Home</a></li>
+                  <li class="active"><a href="../My-Posts.html">Posts</a></li>
+                  <li><a href="../Contact-Me.html">Contact Me</a></li>
+                  <li><a href="../About-Me.html">About Me</a></li>
+                </ul>
+            </div>
+        </nav>
+
+
+
+ <div class="container" style="text-align: center">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="page-heading">
+                        <h1 style="font-weight:700">Backup & Restore with RMAN</h1>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+          
+    
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" style="text-align:justify;">
+            <pre style="font-family: inherit; background-color: transparent; ">  since RMAN uses human-like language for interpreting the command you simply type :
+
+    backup database;
+
+that's all. but we wanted to be more precise in case you may lose or something unexpected happened to "control file" you can do the following :
+
+    rman target /
+    RMAN> CONFIGURE CONTROLFILE AUTOBACKUP ON;
+    RMAN> BACKUP DATABASE PLUS ARCHIVELOG or BACKUP AS BACKUPSET DATABASE PLUS ARCHIVELOG;
+
+you can also give name to your backups by adding a tag name:
+
+    RMAN> BACKUP DATABASE TAG ${YOUR_TAG_NAME};
+
+also you can change your backup folder in two ways, ONE is to change youe backup directory in RMAN , second is in your script give the backup folder which
+are as the followings :
+
+    RMAN> CONFIGURE CHANNEL DEVICE TYPE DISK FORMAT '/backup/rman/full_%u_%s_%p';
+
+or
+
+    run {
+
+    allocate channel d1 type disk;
+
+    backup format '/YOUR/PATH/FOR/BACKUP/%U.bkp' database plus archivelog;
+
+    release channel d1;
+
+    }
+
+
+NOTE : in order to do the RESTORING your database need to be in MOUNT state, you can do it as the following:
+if database is running shut it down first : “shutdown transactional;”
+startup mount;
+Restore With RMAN
+There are multiple way to restore a DB with RMAN but how can we restore backup when we donno how many backups do we have!!??
+worry not, you can list all your backups with :
+
+    RMAN> list backup;
+
+which gives you a list similar like below :
+BS Key Type LV Size Device Type Elapsed Time Completion Time
+------- ---- -- ---------- ----------- ------------ ---------------
+3 Full 245.06G DISK 00:25:34 02-FEB-15
+BP Key: 3 Status: AVAILABLE Compressed: NO Tag: TAG20150202T171725
+Piece Name: /oradata/oradata/backup_rman/04pu9f96_1_1.bkp
+List of Datafiles in backup set 3
+File LV Type Ckp SCN Ckp Time Name
+---- -- ---- ---------- --------- ----
+1 Full 238879810 02-FEB-15 /flash_recovery_area/oradata/system01.dbf
+2 Full 238879810 02-FEB-15 /flash_recovery_area/oradata/sysaux01.dbf
+3 Full 238879810 02-FEB-15 /flash_recovery_area/oradata/undotbs01.dbf
+4 Full 238879810 02-FEB-15 /flash_recovery_area/oradata/users01.dbf
+
+
+BS Key Size Device Type Elapsed Time Completion Time
+------- ---------- ----------- ------------ ---------------
+4 1.56M DISK 00:00:00 02-FEB-15
+BP Key: 4 Status: AVAILABLE Compressed: NO Tag: TAG20150202T174304
+Piece Name: /oradata/oradata/backup_rman/05pu9gp8_1_1.bkp
+
+List of Archived Logs in backup set 4
+Thrd Seq Low SCN Low Time Next SCN Next Time
+---- ------- ---------- --------- ---------- ---------
+1 8 238879587 02-FEB-15 238882605 02-FEB-15
+
+BS Key Type LV Size Device Type Elapsed Time Completion Time
+------- ---- -- ---------- ----------- ------------ ---------------
+5 Full 9.11M DISK 00:00:00 02-FEB-15
+BP Key: 5 Status: AVAILABLE Compressed: NO Tag: TAG20150202T174305
+Piece Name: /flash_recovery_area/oradata/autobackup/2015_02_02/o1_mf_n_870630185_bdz1hkgr_.bkp
+Control File Included: Ckp SCN: 238882614 Ckp time: 02-FEB-15
+
+BS Key Type LV Size Device Type Elapsed Time Completion Time
+------- ---- -- ---------- ----------- ------------ ---------------
+6 Full 9.11M DISK 00:00:00 04-FEB-15
+BP Key: 6 Status: AVAILABLE Compressed: NO Tag: TAG20150204T152731
+Piece Name: /flash_recovery_area/oradata/autobackup/2015_02_04/o1_mf_n_870794851_bf429cs9_.bkp
+Control File Included: Ckp SCN: 238882801 Ckp time: 04-FEB-15
+
+or you can summarize your backups by
+
+    RMAN> list backup summary;
+
+which gives you a list similar like below :
+
+List of Backups
+===============
+Key TY LV S Device Type Completion Time #Pieces #Copies Compressed Tag
+------- -- -- - ----------- --------------- ------- ------- ---------- ---
+2 B A A DISK 02-FEB-15 1 1 NO TAG20150202T171723
+3 B F A DISK 02-FEB-15 1 1 NO TAG20150202T171725
+4 B A A DISK 02-FEB-15 1 1 NO TAG20150202T174304
+5 B F A DISK 02-FEB-15 1 1 NO TAG20150202T174305
+6 B F A DISK 04-FEB-15 1 1 NO TAG20150204T152731
+
+now that we can see our backups lets restore
+1. Tag Name
+
+    RMAN> restore database from tag '${TAG_NAME}';
+
+usually tag uses the time format : TAG2015-02-02-T17:17:23
+
+
+2.Date
+
+    restore database until time "to_date('26-jun-2014 9:53:00', 'dd-mon-rrrr hh24:mi:ss')";
+    recover database until time "to_date('26-jun-2014 9:53:00', 'dd-mon-rrrr hh24:mi:ss')";
+    alter database open resetlogs;
+
+
+
+PS: if you forgot to pick your date you can find it under the "Time" or "TAG" column on your backup list.
+
+            </pre>
+          </div>
+
+
+
+
+  </body>
+</html>

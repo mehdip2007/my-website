@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome To Mehdi website.</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css" >
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-social.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="icon" type="image/x-icon" href="../css/tux-icon.ico">
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+  </head>
+
+  <body>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav">
+                  <li><a href="../index.html">Home</a></li>
+                  <li class="active"><a href="../My-Posts.html">Posts</a></li>
+                  <li><a href="../Contact-Me.html">Contact Me</a></li>
+                  <li><a href="../About-Me.html">About Me</a></li>
+                </ul>
+            </div>
+        </nav>
+
+
+
+ <div class="container" style="text-align: center">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="page-heading">
+                        <h1 style="font-weight:700">How to Write a Simple Route</h1>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+          
+    
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" style="text-align:justify;">
+            <pre style="font-family: inherit; background-color: transparent; ">  <strong>Linux : </strong>
+Here what you need to do just open terminal or you can use shortcut (Ctrl+Alt+T) then type :
+sudo ip route add ${SUBNET} via ${GATEWAY_IP}
+
+sudo ip route add 172.16.0.0/16 via 10.5.11.1
+but if you restart your system its all gone just open the file in "/etc/rc.local" and insert it there without the sudo.
+
+
+<strong>Windows:</strong>
+
+Open your cmd(command Prompt) and to the following: 
+C:\Windows\system32>netsh.exe
+netsh>interface
+netsh interface>ip 
+netsh interface ipv4>show interface
+
+Idx Met MTU State Name
+--- ---------- ---------- ------------ ---------------------------
+1 4275 4294967295 connected Loopback Pseudo-Interface 1
+27 20 1400 connected VPN Connection
+11 4245 1500 connected Local Area Connection
+15 4245 1400 disconnected Kerio Virtual Network
+
+netsh interface ipv4>add route 192.168.0.0/16 11 10.5.11.1
+Ok.
+
+netsh interface ipv4>add route 172.16.0.0/16 11 10.5.11.1
+Ok.
+
+netsh interface ipv4>exit
+
+
+if you wanted to check your where your routing goes issue the command below : 
+netsh interface ipv4>show route  
+
+
+            </pre>
+          </div>
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome To Mehdi website.</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css" >
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-social.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="icon" type="image/x-icon" href="../css/tux-icon.ico">
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+  </head>
+
+  <body>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav">
+                  <li><a href="../index.html">Home</a></li>
+                  <li class="active"><a href="../My-Posts.html">Posts</a></li>
+                  <li><a href="../Contact-Me.html">Contact Me</a></li>
+                  <li><a href="../About-Me.html">About Me</a></li>
+                </ul>
+            </div>
+        </nav>
+
+
+
+ <div class="container" style="text-align: center">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="page-heading">
+                        <h1 style="font-weight:700">RMAN Active Database Duplication</h1>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+          
+    
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" style="text-align:justify;">
+            <pre style="font-family: inherit; background-color: transparent; ">   well for doing the active database duplication there are a few thing you need to check which are as the followings:
+
+    Free space
+    check in your target database pfile that these two lines exist:
+
+    *.db_file_name_convert='{SOURCEDB_DATAFILE_LOC}','{TARGTDB_DATAFILE_LOC}'
+    *.log_file_name_convert='{SOURCEDB_DATAFILE_LOC}','{TARGTDB_DATAFILE_LOC}'
+
+3. Password on the both side should be the same.
+4. ARCHIVELOG mode must be enabled on both sides.
+5. both source and destination(target) database servers require "tnsnames.ora" entry.
+Enable Archive Log
+
+    sqlplus / as sysdba
+    SQL> archive log list;
+
+            Database log mode No Archive Mode
+            Automatic archival Disabled
+            Archive destination USE_DB_RECOVERY_FILE_DEST
+            Oldest online log sequence 15
+            Current log sequence 17
+
+    SQL> alter database archivelog;
+    SQL> archive log list;
+
+Database log mode No Archive Mode
+Automatic archival Disabled
+Archive destination USE_DB_RECOVERY_FILE_DEST
+Oldest online log sequence 15
+
+Current log sequence 17 
+Drop Database using SQL
+1. connect to your target database
+2. export ORACLE_SID= ${ORACLE_SID} --> for multiple oracle instance
+3. sqlplus / as sysdba
+SQL*Plus: Release 11.2.0.4.0 Production on Tue Dec 23 10:21:34 2014
+Copyright (c) 1982, 2013, Oracle. All rights reserved.
+Connected to:
+Oracle Database 11g Release 11.2.0.4.0 - 64bit Production
+4. SQL> shutdown transactional;
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+5. SQL> startup mount exclusive restrict;
+ORACLE instance started.
+Total System Global Area 8584982528 bytes
+Fixed Size 2253256 bytes
+Variable Size 1744834104 bytes
+Database Buffers 6677331968 bytes
+Redo Buffers 160563200 bytes
+Database mounted.
+6. SQL> drop database;
+Database dropped.
+Disconnected from Oracle Database 11g Release 11.2.0.4.0 - 64bit Production
+7. SQL> startup nomount;
+ORACLE instance started.
+Total System Global Area 4776853504 bytes
+Fixed Size 2254416 bytes
+Variable Size 1258293680 bytes
+Database Buffers 3372220416 bytes
+Redo Buffers 144084992 bytes
+Note : if you can get your database to "startup nomount" try to exit and then login as sys again.
+
+After adding the servers in the tnsnames.ora confirm that they can connect to each other :
+
+    from the source “tnsping ${auxiliary_database_name}"
+    from the auxiliary “tnsping ${source_database_name}"
+
+in order to be more sure check the password too
+
+    from the source "sqlplus /nolog"
+    conn sys@${source_database_name}
+    enter password
+    do the same from target database if they can be connected.
+
+Now in the target database do the followings :
+
+    rman target sys@${SOURCE_DBNAME} auxiliary sys@${AUXILIARY_DB}
+    ENTER THE PASSWORDS
+    after connecting run the following:
+
+
+duplicate target database to ${ORACLE_SID} from active database nofilenamecheck;
+            </pre>
+          </div>
+
+
+
+
+  </body>
+</html>

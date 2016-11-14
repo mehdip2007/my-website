@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome To Mehdi website.</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css" >
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-social.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="icon" type="image/x-icon" href="../css/tux-icon.ico">
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+  </head>
+
+  <body>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav">
+                  <li><a href="../index.html">Home</a></li>
+                  <li class="active"><a href="../My-Posts.html">Posts</a></li>
+                  <li><a href="../Contact-Me.html">Contact Me</a></li>
+                  <li><a href="../About-Me.html">About Me</a></li>
+                </ul>
+            </div>
+        </nav>
+
+
+
+ <div class="container" style="text-align: center">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="page-heading">
+                        <h1 style="font-weight:700">Clean RAM Cache in Linux</h1>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+          
+    
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" style="text-align:justify;">
+            <pre style="font-family: inherit; background-color: transparent; text-align:center; ">  First of all check how much memory you have left :
+mehdi@MPourhadi ~/> free -m
+
+                     total     used         free    shared  buffers   cached
+                     Mem:    5968      5630         337     64        116        1038
+                     -/+ buffers/cache: 4475        1492
+                     Swap: 6139          56        6083
+
+now issue the the command "sync" to flush the file system buffer. then change your root user.
+For Debian-base users : "sudo bash" and for RPM packages "su or su -"
+when you are root user issue the following command and see the diffrence :
+
+root@MPourhadi:~/# echo 3 > /proc/sys/vm/drop_caches
+
+     <strong> NOTE : </strong>
+      echo 1 is for free pagecache
+      echo 2 is for free dentries and inodes
+      echo 3 is 1+2
+
+
+root@MPourhadi:~/# free -m
+                 total        used        free     shared      buffers       cached
+                 Mem:  5968        4399        1568      60            2               318
+                 -/+ buffers/cache: 4078 1889  
+                 Swap: 6139 56 6083
+
+            </pre>
+          </div>
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome To Mehdi website.</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css" >
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-social.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="icon" type="image/x-icon" href="../css/tux-icon.ico">
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+  </head>
+
+  <body>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav">
+                  <li><a href="../index.html">Home</a></li>
+                  <li class="active"><a href="../My-Posts.html">Posts</a></li>
+                  <li><a href="../Contact-Me.html">Contact Me</a></li>
+                  <li><a href="../About-Me.html">About Me</a></li>
+                </ul>
+            </div>
+        </nav>
+
+
+
+ <div class="container" style="text-align: center">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="page-heading">
+                        <h1 style="font-weight:700">Oracle Solution Part 2</h1>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+          
+    
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" style="text-align:justify;">
+            <pre style="font-family: inherit; background-color: transparent; ">  Do you wanna move your oracle datafile to a new location but donno how !? relax i'm gonna explain it .
+first of all you need to check where is your "CURRENT" datafile , do as the following :
+
+    sqlplus / as sysdba 
+
+
+         SQL*Plus: Release 11.2.0.4.0 Production on Sat Mar 14 16:33:22 2015
+         Copyright (c) 1982, 2013, Oracle. All rights reserved.
+         Connected to:
+         Oracle Database 11g Release 11.2.0.4.0 - 64bit Production
+
+    SQL> select name from v$datafile;
+
+
+         the out put should be similar to the below :
+         NAME
+         --------------------------------------------------------------------------------
+         /oradata/system01.dbf
+         /oradata/sysaux01.dbf
+         /oradata/undotbs01.dbf
+         /oradata/users01.dbf
+now that we know where our current datafile is we can change in the new place we want by do the following :
+    alter database rename file '/oradadata/system01.dbf' to '/new/oradata/path/system01.dbf';
+    alter database rename file '/oradadata/sysaux01.dbf' to '/new/oradata/path/sysaux01.dbf';
+do it for the rest of the file if you have more than that.
+now when you try to open up your database you may get the error related to the "redo logs", worry not the concept its just as the same as datafile. you will find your current redo log by below query:
+
+    SQL> select member from v$logfile;
+
+
+         MEMBER
+         --------------------------------------------------------------------------------
+         /oradata/redo02.log
+         /oradata/redo01.log
+now you can rename it ,
+alter database rename file '/oradata/redo02.log' to '/new/oradata/path/redo02.log';
+
+alter database rename file '/oradata/redo01.log' to '/new/oradata/path/redo01.log' ;  
+
+            </pre>
+          </div>
+
+
+
+
+  </body>
+</html>

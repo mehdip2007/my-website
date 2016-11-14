@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome To Mehdi website.</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css" >
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-social.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="icon" type="image/x-icon" href="../css/tux-icon.ico">
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+  </head>
+
+  <body>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav">
+                  <li><a href="../index.html">Home</a></li>
+                  <li class="active"><a href="../My-Posts.html">Posts</a></li>
+                  <li><a href="../Contact-Me.html">Contact Me</a></li>
+                  <li><a href="../About-Me.html">About Me</a></li>
+                </ul>
+            </div>
+        </nav>
+
+
+
+ <div class="container" style="text-align: center">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="page-heading">
+                        <h1 style="font-weight:700">RMAN Active Database Duplication - Backup Base</h1>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+          
+    
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" style="text-align:justify;">
+            <pre style="font-family: inherit; background-color: transparent; ">  Before we begin i assume have that copy of the backup on our server no matter in where.
+-bash-4.2$ echo $ORACLE_SID
+orcl
+-bash-4.2$ rman auxiliary /
+Recovery Manager: Release 11.2.0.4.0 - Production on Sat Feb 28 15:44:28 2015
+Copyright (c) 1982, 2011, Oracle and/or its affiliates. All rights reserved.
+connected to auxiliary database: orcl (not mounted)
+RMAN> duplicate database to orcl backup location '/path/to/your/backup' nofilenamecheck;
+Starting Duplicate Db at 28-FEB-15
+contents of Memory Script:
+{
+sql clone "create spfile from memory";
+}
+executing Memory Script
+sql statement: create spfile from memory
+contents of Memory Script:
+{
+shutdown clone immediate;
+startup clone nomount;
+}
+executing Memory Script
+Oracle instance shut down
+connected to auxiliary database (not started)
+Oracle instance started
+Total System Global Area 42757922816 bytes
+Fixed Size 2255784 bytes
+Variable Size 41070625880 bytes
+Database Buffers 1610612736 bytes
+Redo Buffers 74428416 bytes
+contents of Memory Script:
+{
+sql clone "alter system set db_name =
+''orcl'' comment=
+''Modified by RMAN duplicate'' scope=spfile";
+sql clone "alter system set db_unique_name =
+''orcl'' comment=
+''Modified by RMAN duplicate'' scope=spfile";
+shutdown clone immediate;
+startup clone force nomount
+restore clone primary controlfile from '/flash_recovery_area/backupset/2015_02_25/o1_mf_ncnnf_TAG20150225T004304_bgstc1j9_.bkp';
+alter clone database mount;
+}
+executing Memory Script
+sql statement: alter system set db_name = ''orcl'' comment= ''Modified by RMAN duplicate'' scope=spfile
+sql statement: alter system set db_unique_name = ''orcl'' comment= ''Modified by RMAN duplicate'' scope=spfile
+Oracle instance shut down
+Oracle instance started
+Total System Global Area 42757922816 bytes
+Fixed Size 2255784 bytes
+Variable Size 41070625880 bytes
+Database Buffers 1610612736 bytes
+Redo Buffers 74428416 bytes
+Starting restore at 28-FEB-15
+allocated channel: ORA_AUX_DISK_1
+channel ORA_AUX_DISK_1: SID=673 device type=DISK
+channel ORA_AUX_DISK_1: restoring control file
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:01
+output file name=/oradata/control01.ctl
+output file name=/oradata/control02.ctl
+Finished restore at 28-FEB-15
+database mounted
+released channel: ORA_AUX_DISK_1
+allocated channel: ORA_AUX_DISK_1
+channel ORA_AUX_DISK_1: SID=673 device type=DISK
+Using previous duplicated file /oradata/aen_data.dbf for datafile 63 with checkpoint SCN of 278482136
+contents of Memory Script:
+{
+set until scn 278484383;
+set newname for datafile 1 to
+"/oradata/system01.dbf";
+set newname for datafile 2 to
+"/oradata/sysaux01.dbf";
+set newname for datafile 3 to
+"/oradata/undotbs01.dbf";
+set newname for datafile 4 to
+"/oradata/users01.dbf";
+set newname for datafile 5 to
+restore
+clone datafile
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+}
+executing Memory Script
+executing command: SET until clause
+executing command: SET NEWNAME
+executing command: SET NEWNAME
+executing command: SET NEWNAME
+executing command: SET NEWNAME
+executing command: SET NEWNAME
+executing command: SET NEWNAME
+executing command: SET NEWNAME
+Starting restore at 28-FEB-15
+using channel ORA_AUX_DISK_1
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00001 to /oradata/system01.dbf
+channel ORA_AUX_DISK_1: restoring datafile 00002 to /oradata/sysaux01.dbf
+channel ORA_AUX_DISK_1: restoring datafile 00003 to /oradata/undotbs01.dbf
+channel ORA_AUX_DISK_1: restoring datafile 00004 to /oradata/users01.dbf
+channel ORA_AUX_DISK_1: reading from backup piece /flash_recovery_area/backupset/2015_02_25/o1_mf_nnndf_TAG20150225T000647_bgsr71nv_.bkp
+channel ORA_AUX_DISK_1: piece handle=/flash_recovery_area/backupset/2015_02_25/o1_mf_nnndf_TAG20150225T000647_bgsr71nv_.bkp tag=TAG20150225T000647
+channel ORA_AUX_DISK_1: restored backup piece 1
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:31:36
+Finished restore at 28-FEB-15
+contents of Memory Script:
+{
+catalog clone datafilecopy "/oradata/aen_data.dbf";
+switch clone datafile 63 to datafilecopy
+"/oradata/aen_data.dbf";
+switch clone datafile all;
+}
+executing Memory Script
+cataloged datafile copy
+datafile copy file name=/oradata/aen_data.dbf RECID=64 STAMP=872871419
+datafile 1 switched to datafile copy
+input datafile copy RECID=65 STAMP=872871419 file name=/oradata/system01.dbf
+datafile 2 switched to datafile copy
+input datafile copy RECID=66 STAMP=872871419 file name=/oradata/sysaux01.dbf
+datafile 3 switched to datafile copy
+input datafile copy RECID=67 STAMP=872871419 file name=/oradata/undotbs01.dbf
+datafile 4 switched to datafile copy
+input datafile copy RECID=68 STAMP=872871419 file name=/oradata/users01.dbf
+contents of Memory Script:
+{
+set until scn 278484383;
+recover
+clone database
+delete archivelog
+;
+}
+executing Memory Script
+executing command: SET until clause
+Starting recover at 28-FEB-15
+using channel ORA_AUX_DISK_1
+starting media recovery
+channel ORA_AUX_DISK_1: starting archived log restore to default destination
+channel ORA_AUX_DISK_1: restoring archived log
+archived log thread=1 sequence=3538
+channel ORA_AUX_DISK_1: reading from backup piece /flash_recovery_area/backupset/2015_02_25/o1_mf_annnn_TAG20150225T004255_bgstbql8_.bkp
+Oracle Error:
+ORA-01547: warning: RECOVER succeeded but OPEN RESETLOGS would get error below
+ORA-01194: file 1 needs more recovery to be consistent
+ORA-01110: data file 1: '/oradata/system01.dbf'
+
+RMAN-00571: ===========================================================
+RMAN-00569: =============== ERROR MESSAGE STACK FOLLOWS ===============
+RMAN-00571: ===========================================================
+RMAN-03002: failure of Duplicate Db command at 02/28/2015 16:17:06
+RMAN-05501: aborting duplication of target database
+RMAN-03015: error occurred in stored script Memory Script
+ORA-19870: error while restoring backup piece /flash_recovery_area/backupset/2015_02_25/o1_mf_annnn_TAG20150225T004255_bgstbql8_.bkp
+ORA-19809: limit exceeded for recovery files
+ORA-19804: cannot reclaim 4021248 bytes disk space from 107374182400 limit
+
+
+
+now we are going to check the errors one by one :
+1- ORA-01547: warning: RECOVER succeeded but OPEN RESETLOGS would get error below
+ORA-01194: file 1 needs more recovery to be consistent
+ORA-01110: data file 1: '/oradata/system01.dbf'
+This one either you have to restore from autobackup or from a backup.(unfortunately it didn't work for me)
+
+2- ORA-19809: limit exceeded for recovery files
+ORA-19804: cannot reclaim 4021248 bytes disk space from 107374182400 limit
+This means that your flash recovery area(FRA) is not enough so you have to exapnd it(i already explained in here.)
+as our data files has been set to our new database we can do some startup functionality.
+bash-4.2$ sqlplus / as sysdba
+SQL*Plus: Release 11.2.0.4.0 Production on Sat Feb 28 18:40:22 2015
+Copyright (c) 1982, 2013, Oracle. All rights reserved.
+Connected to:
+Oracle Database 11g Release 11.2.0.4.0 - 64bit Production
+
+SQL> shutdown immediate
+Oracle database closed
+Oracle database dismounted
+Oracle instance shutdown
+SQL>startup nomount;
+ORACLE instance started.
+Total System Global Area 4.2758E+10 bytes
+Fixed Size 2255784 bytes
+Variable Size 4.0400E+10 bytes
+Database Buffers 2281701376 bytes
+Redo Buffers 74428416 bytes
+SQL> alter database mount;
+Database altered
+SQL> alter database open;
+alter database open
+ERROR at line 1:
+ORA-19838: Cannot use this control file to open database
+Now we need to recreate our control file i order to that, you can use either this command
+SQL> alter database backup controlfile to trace as '/dbapp/controlnew.lst';
+Database altered.
+in the '/dbapp/controlnew.lst' file there is controlfile info which allows you to modify controlfile.
+or use the following script :
+SQL> CREATE CONTROLFILE SET DATABASE "DBNAME" RESETLOGS FORCE LOGGING ARCHIVELOG
+MAXLOGFILES 16
+MAXLOGMEMBERS 3
+MAXDATAFILES 100
+MAXINSTANCES 8
+MAXLOGHISTORY 2336
+LOGFILE
+GROUP 1 '/dbapp/redos/redo01.log' SIZE 50M BLOCKSIZE 512,
+GROUP 2 '/dbapp/redos/redo02.log' SIZE 50M BLOCKSIZE 512,
+GROUP 3 '/dbapp/redos/redo03.log' SIZE 50M BLOCKSIZE 512
+-- STANDBY LOGFILE
+DATAFILE
+'/oradata/system01.dbf',
+'/oradata/sysaux01.dbf',
+'/oradata/undotbs01.dbf',
+'/oradata/users01.dbf',
+CHARACTER SET AL32UTF8
+;
+
+Control file created.
+
+SQL> alter database open resetlogs;
+alter database open resetlogs
+ERROR at line 1:
+ORA-01194: file 1 needs more recovery to be consistent
+ORA-01110: data file 1: '/oradata/system01.dbf'
+SQL> create pfile from spfile;
+File created.
+SQL> exit
+now add this line "_allow_resetlogs_corruption=TRUE" to your pfile then save and quit,
+SQL> create spfile from pfile;
+File created.
+SQL> startup;
+ORACLE instance started.
+Total System Global Area 4.2758E+10 bytes
+Fixed Size 2255784 bytes
+Variable Size 4.0400E+10 bytes
+Database Buffers 2281701376 bytes
+Redo Buffers 74428416 bytes
+Database mounted.
+ORA-01589: must use RESETLOGS or NORESETLOGS option for database open
+SQL> alter database open resetlogs;
+Database altered.
+
+            </pre>
+          </div>
+
+
+
+
+  </body>
+</html>

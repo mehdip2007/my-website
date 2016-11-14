@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome To Mehdi website.</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css" >
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-social.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="icon" type="image/x-icon" href="../css/tux-icon.ico">
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+  </head>
+
+  <body>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav">
+                  <li><a href="../index.html">Home</a></li>
+                  <li class="active"><a href="../My-Posts.html">Posts</a></li>
+                  <li><a href="../Contact-Me.html">Contact Me</a></li>
+                  <li><a href="../About-Me.html">About Me</a></li>
+                </ul>
+            </div>
+        </nav>
+
+
+
+ <div class="container" style="text-align: center">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="page-heading">
+                        <h1 style="font-weight:700">Oracle Solution Part 1 </h1>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+          
+    
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" style="text-align:justify;">
+            <pre style="font-family: inherit; background-color: transparent; ">  Since this the first part one of the most common error you encouter with is, well atleast for me it was, is when you want to connect via Oracle Database with client such as "Oracle SQL Developer" is :
+"fix ora-00257: archiver error. connect internal only, until freed"
+Cause: The archiver process received an error while trying to archive a redo log. so the database will stop executing transactions. The most likely cause of this message is the destination device is out of space to store the redo log file or your db ecovery file destination space is filled up and you need to expand it the following commad will solve your problem :
+in our example its 80GB.
+sqlplus / as sysdba
+SQL*Plus: Release 11.2.0.4.0 Production on Tue Mar 3 13:48:59 2015
+Copyright (c) 1982, 2013, Oracle. All rights reserved.
+Connected to:
+Oracle Database 11g Release 11.2.0.4.0 - 64bit Production
+SQL> sho parameter db_recovery_file
+NAME TYPE
+------------------------------------ ---------------------------------
+VALUE
+------------------------------
+db_recovery_file_dest string
+/flash_recovery_area
+db_recovery_file_dest_size big integer
+80G
+SQL> alter system set db_recovery_file_dest_size = 800g;
+Database altered
+SQL> sho parameter db_recovery_file
+NAME TYPE
+------------------------------------ ---------------------------------
+VALUE
+------------------------------
+db_recovery_file_dest string
+/flash_recovery_area
+db_recovery_file_dest_size big integer
+800G
+Its better to restart your database for further error encountering, if the Database open up nicely there you go.
+NOTE : since we gave it 800GB you need to consider your disk space as its generate the archive redo logs ;) 
+
+            </pre>
+          </div>
+
+
+
+
+  </body>
+</html>

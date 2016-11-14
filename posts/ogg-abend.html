@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome To Mehdi website.</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css" >
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-social.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="icon" type="image/x-icon" href="../css/tux-icon.ico">
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+  </head>
+
+  <body>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav">
+                  <li><a href="../index.html">Home</a></li>
+                  <li class="active"><a href="../My-Posts.html">Posts</a></li>
+                  <li><a href="../Contact-Me.html">Contact Me</a></li>
+                  <li><a href="../About-Me.html">About Me</a></li>
+                </ul>
+            </div>
+        </nav>
+
+
+
+ <div class="container" style="text-align: center">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="page-heading">
+                        <h1 style="font-weight:700">OGG "ABEND" process Troubleshoot</h1>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+          
+    
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" style="text-align:justify;">
+            <pre style="font-family: inherit; background-color: transparent; ">  1. connect via ssh to the source Database
+export ORACLE_SID=${ORACLE_SID}
+2. query FLASHBACK_SCN
+sqlplus / as sysdba
+SQL> select dbms_flashback.get_system_change_number from dual or select current_scn from v$database;
+GET_SYSTEM_CHANGE_NUMBER
+------------------------
+17262230 --ID is your select result
+SQL> exit
+3. export dump
+Note : FLASHBACK_SCN is upper shown number.
+exp system@${ORACLE_SID} owner=ABEND_process file=ABEND_process.dmp grants=n statistics=none triggers=n compress=n FLASHBACK_SCN=17262230 log=ABEND_process.log
+4. Copy the dump to Staging Database
+5. connect via ssh to the staging Database
+export ORACLE_SID=${STAGING_ORACLE_SID}
+
+
+6. Drop table
+sqlplus / as sysdba
+SQL>set linesize 999
+SQL>set pagesize 999
+SQL>select 'drop table '||owner||'.'||object_name||' cascade constraint;' from dba_objects where object_type='TABLE' and owner in ('ABEND_process');
+
+
+Note : after running the query above copy the the prompted results and run to make sure the table is dropped.
+
+
+7. import dump
+
+    go to the dump directory
+
+imp system@${ORACLE_STAGING_SID} file=ABEND_process.dmp fromuser= ABEND_process touser= ABEND_process ignore=y log=ABEND_process.log
+8. Disable Foreign key
+SQL> sqlplus / as sysdba
+SQL>set linesize 999
+SQL>set pagesize 999
+SQL>select 'alter table '||owner||'.'||table_name||' disable constraint '||constraint_name||';' from dba_constraints where owner in ('ABEND_process') and constraint_type='R';
+SQL>exit
+Note : after running the query above copy the the prompted results and run to make sure the table is dropped.
+9. Go to stg_goldengate_home
+
+    ./ggsci
+
+SQL>START RP_ ABEND_process aftercsn $FLASHBACK_SCN
+SQL>exit
+Note : $FLASHBACK_SCN is query in source database .
+
+            </pre>
+          </div>
+
+
+
+
+  </body>
+</html>
