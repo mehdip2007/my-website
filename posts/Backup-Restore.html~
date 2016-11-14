@@ -8,7 +8,6 @@
     <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-social.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="../css/glyphicons-filetypes.css">
     <link rel="icon" type="image/x-icon" href="../css/tux-icon.ico">
     <script src="jquery.min.js"></script>
     <script src="bootstrap.min.js"></script>
@@ -157,15 +156,7 @@ usually tag uses the time format : TAG2015-02-02-T17:17:23
 PS: if you forgot to pick your date you can find it under the "Time" or "TAG" column on your backup list.
 
             </pre>
-
-<!-- <span class="glyphicon glyphicon-circle-arrow-up"> </span> -->
-
-<a id="back-to-top" href="#" class="btn btn-primary btn-lg back-to-top" role="button" title="" data-toggle="tooltip" data-placement="left" 
-data-original-title="Click to return on the top page" 
-style="display: inline;"><span class="glyphicon glyphicon-chevron-up"></span></a>
-
-
- </div>
+          </div>
 
 
 
